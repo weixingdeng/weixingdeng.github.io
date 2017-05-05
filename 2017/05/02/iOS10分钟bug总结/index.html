@@ -1,0 +1,734 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.0" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.0" />
+
+
+
+
+
+
+<meta name="description" content="iOS开发中花费10分钟以上的bug记录1.tableview不显示cell，但是在视图查看器中能看到数据。看是不是tableview的foot或者headview的高度太高，把cell挤出去了。 2.tableview中有textfiled时候用cell.textField.text做非空判断，判断不准确不能使用cell的textField中的值，因为可能cell这时候不在视图中，cell这时候">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS开发中花费10分钟以上的bug记录">
+<meta property="og:url" content="http://yoursite.com/2017/05/02/iOS10分钟bug总结/index.html">
+<meta property="og:site_name" content="桔、子">
+<meta property="og:description" content="iOS开发中花费10分钟以上的bug记录1.tableview不显示cell，但是在视图查看器中能看到数据。看是不是tableview的foot或者headview的高度太高，把cell挤出去了。 2.tableview中有textfiled时候用cell.textField.text做非空判断，判断不准确不能使用cell的textField中的值，因为可能cell这时候不在视图中，cell这时候">
+<meta property="og:updated_time" content="2017-05-05T09:48:36.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS开发中花费10分钟以上的bug记录">
+<meta name="twitter:description" content="iOS开发中花费10分钟以上的bug记录1.tableview不显示cell，但是在视图查看器中能看到数据。看是不是tableview的foot或者headview的高度太高，把cell挤出去了。 2.tableview中有textfiled时候用cell.textField.text做非空判断，判断不准确不能使用cell的textField中的值，因为可能cell这时候不在视图中，cell这时候">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/02/iOS10分钟bug总结/"/>
+
+
+
+
+
+  <title> iOS开发中花费10分钟以上的bug记录 | 桔、子 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">桔、子</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/02/iOS10分钟bug总结/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="wxdeng">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="桔、子">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                iOS开发中花费10分钟以上的bug记录
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-05-02T14:59:23+08:00">
+                2017-05-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="iOS开发中花费10分钟以上的bug记录"><a href="#iOS开发中花费10分钟以上的bug记录" class="headerlink" title="iOS开发中花费10分钟以上的bug记录"></a>iOS开发中花费10分钟以上的bug记录</h2><h3 id="1-tableview不显示cell，但是在视图查看器中能看到数据。"><a href="#1-tableview不显示cell，但是在视图查看器中能看到数据。" class="headerlink" title="1.tableview不显示cell，但是在视图查看器中能看到数据。"></a>1.tableview不显示cell，但是在视图查看器中能看到数据。</h3><pre><code>看是不是tableview的foot或者headview的高度太高，把cell挤出去了。
+</code></pre><h3 id="2-tableview中有textfiled时候用cell-textField-text做非空判断，判断不准确"><a href="#2-tableview中有textfiled时候用cell-textField-text做非空判断，判断不准确" class="headerlink" title="2.tableview中有textfiled时候用cell.textField.text做非空判断，判断不准确"></a>2.tableview中有textfiled时候用cell.textField.text做非空判断，判断不准确</h3><pre><code>不能使用cell的textField中的值，因为可能cell这时候不在视图中，cell这时候为nil
+</code></pre><h3 id="3-tableview中cell位置总是不对"><a href="#3-tableview中cell位置总是不对" class="headerlink" title="3.tableview中cell位置总是不对"></a>3.tableview中cell位置总是不对</h3><pre><code>使用懒加载时候,一定注意return,别return回去复制的其他类了!!!
+- (UILabel *)label1
+{
+    if...;
+    reture label2;
+}
+</code></pre><h3 id="4-Sqlite聊天-考虑每个用户创建一个表-所以需要动态创建表-但是FMDB不支持动态插入-数据库名-表名不能是数字开头的"><a href="#4-Sqlite聊天-考虑每个用户创建一个表-所以需要动态创建表-但是FMDB不支持动态插入-数据库名-表名不能是数字开头的" class="headerlink" title="4.Sqlite聊天,考虑每个用户创建一个表,所以需要动态创建表.但是FMDB不支持动态插入.(数据库名,表名不能是数字开头的)"></a>4.Sqlite聊天,考虑每个用户创建一个表,所以需要动态创建表.但是FMDB不支持动态插入.(数据库名,表名不能是数字开头的)</h3><pre><code>---以上2种写法都是错的---
+1.FMResultSet *rs = [db executeQuery:@&quot;select * from %@&quot;, tableName];
+
+2.FMResultSet *rs = [db executeQuery:@&quot;select * from ?&quot;, tableName];
+
+查询参数可以是变量，然后绑定参数，但是表名必须是常量，所以要这么写：
+NSString *sql = [NSString stringWithFormat:@&quot;select * from %@&quot;, tableName];
+FMResultSet *rs = [db executeQuery:sql];
+
+先提前把sql拼好，传给executeQuery方法的是一个常量
+</code></pre><h3 id="5-CAAnimation-动画-如果设置代理-结束后要移除动画-否则释放不了-待考证"><a href="#5-CAAnimation-动画-如果设置代理-结束后要移除动画-否则释放不了-待考证" class="headerlink" title="5.CAAnimation 动画,如果设置代理,结束后要移除动画,否则释放不了.待考证"></a>5.CAAnimation 动画,如果设置代理,结束后要移除动画,否则释放不了.待考证</h3><h3 id="6-duplicate-symbol-OBJCIVAR"><a href="#6-duplicate-symbol-OBJCIVAR" class="headerlink" title="6.duplicate symbol _OBJCIVAR$_"></a>6.duplicate symbol _OBJC<em>IVAR</em>$_</h3><pre><code>    duplicate symbol _OBJC_IVAR_$_EhiPowerfullCarTimeButton._titleColor in:
+    /Users/dengwx/Library/Developer/Xcode/DerivedData/EHiBaseProject-alzfjvgxriybafemazpqxskrotwm/Build/Intermediates/EHiBaseProject.build/Debug-iphoneos/EHiBaseProject.build/Objects-normal/armv7/EhiPowerfullCarTimeSelectView.o
+    /Users/dengwx/Library/Developer/Xcode/DerivedData/EHiBaseProject-alzfjvgxriybafemazpqxskrotwm/Build/Intermediates/EHiBaseProject.build/Debug-iphoneos/EHiBaseProject.build/Objects-normal/armv7/EhiPowerfullCarTimeButton.o
+duplicate symbol _OBJC_CLASS_$_EhiPowerfullCarTimeButton in:
+提示重复引入:
+一种可能性是你的项目的不同group里有着相同名称的类
+You could also get this error if you mistakenly let XCode&apos;s auto-complete for #import statements specify the &apos;.m&quot; file for the     &apos;duplicate&apos; class instead of the &apos;.h&apos;.
+
+---也可能xcode的自动完成特性，在你导入头文件的时候，将&quot;.h&quot;补成了&quot;.m&quot;---
+</code></pre><h3 id="7-MJExcetion字典转模型-部分没有值"><a href="#7-MJExcetion字典转模型-部分没有值" class="headerlink" title="7.MJExcetion字典转模型,部分没有值"></a>7.MJExcetion字典转模型,部分没有值</h3><pre><code>@property (nonatomic , assign) NSInteger *DriverName ;
+写属性的时候,NSInter使用了* 所以后面都没转成功
+</code></pre><h3 id="8-vc的delegate的坑"><a href="#8-vc的delegate的坑" class="headerlink" title="8.vc的delegate的坑"></a>8.vc的delegate的坑</h3><pre><code>将XXViewContrller设置为delegate时，当页面发生跳转时，    XXViewController的对象会被释放，这是代码走到[_delegate     callbackMethod],便出现crash。
+关键字使用assign时候 虽然也释放了 但是delegate没有置为nil,所以在responseToselect的时候 会走进去 但是方法已经没了 所以会崩溃.
+
+处理方法一:使用assign时候 在dealloc中写self.delegate=nil;
+处理方法二:直接使用weak
+</code></pre><h3 id="9-UISwitch-Target的坑"><a href="#9-UISwitch-Target的坑" class="headerlink" title="9.UISwitch Target的坑"></a>9.UISwitch Target的坑</h3><pre><code>UISwitch的是否选中要使用switch.isOn 而不是isSelect,使用isSelect会出现错误的结果.
+
+不需要手动更改他的状态 点击会自动改变!
+switch.On = !switch.On;
+这样会调用他的action方法.注意这个on,下次会考!-.-
+</code></pre><h3 id="10-Masonry断言"><a href="#10-Masonry断言" class="headerlink" title="10.Masonry断言"></a>10.Masonry断言</h3><pre><code> Terminating app due to uncaught exception         &apos;NSInternalInconsistencyException&apos;, reason: &apos;attempting to     add unsupported attribute: (null)&apos;
+
+ 原因:上个控件没有约束好, 或者是插入顺序有问题
+
+ 我的上个这么约束的:
+  [self.iconImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+
+    make.top.left.mas_equalTo(10);
+    make.bottom.mas_equalTo(-10);
+    make.width.mas_equalTo(self.iconImgView.mas_height);
+}];
+
+下面个控件:
+     make.left.mas_equalTo(self.iconImgView.mas_height);//这个应该直接使用height! 
+</code></pre><h3 id="11-支付宝支付成功或者失败-不回调"><a href="#11-支付宝支付成功或者失败-不回调" class="headerlink" title="11.支付宝支付成功或者失败 不回调"></a>11.支付宝支付成功或者失败 不回调</h3><p>  这是一个比较坑的bug</p>
+<h3 id="12-页面传model深拷贝"><a href="#12-页面传model深拷贝" class="headerlink" title="12.页面传model深拷贝"></a>12.页面传model深拷贝</h3>
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/12/iOS开发Tips/" rel="prev" title="iOS开发中Tips">
+                iOS开发中Tips <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="wxdeng" />
+          <p class="site-author-name" itemprop="name">wxdeng</p>
+           
+              <p class="site-description motion-element" itemprop="description">编程如逆水行舟, 不是累死, 就是溺死-.-划水有风险, 上船须谨慎</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">标签</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#iOS开发中花费10分钟以上的bug记录"><span class="nav-number">1.</span> <span class="nav-text">iOS开发中花费10分钟以上的bug记录</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-tableview不显示cell，但是在视图查看器中能看到数据。"><span class="nav-number">1.1.</span> <span class="nav-text">1.tableview不显示cell，但是在视图查看器中能看到数据。</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-tableview中有textfiled时候用cell-textField-text做非空判断，判断不准确"><span class="nav-number">1.2.</span> <span class="nav-text">2.tableview中有textfiled时候用cell.textField.text做非空判断，判断不准确</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-tableview中cell位置总是不对"><span class="nav-number">1.3.</span> <span class="nav-text">3.tableview中cell位置总是不对</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Sqlite聊天-考虑每个用户创建一个表-所以需要动态创建表-但是FMDB不支持动态插入-数据库名-表名不能是数字开头的"><span class="nav-number">1.4.</span> <span class="nav-text">4.Sqlite聊天,考虑每个用户创建一个表,所以需要动态创建表.但是FMDB不支持动态插入.(数据库名,表名不能是数字开头的)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-CAAnimation-动画-如果设置代理-结束后要移除动画-否则释放不了-待考证"><span class="nav-number">1.5.</span> <span class="nav-text">5.CAAnimation 动画,如果设置代理,结束后要移除动画,否则释放不了.待考证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-duplicate-symbol-OBJCIVAR"><span class="nav-number">1.6.</span> <span class="nav-text">6.duplicate symbol _OBJCIVAR$_</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-MJExcetion字典转模型-部分没有值"><span class="nav-number">1.7.</span> <span class="nav-text">7.MJExcetion字典转模型,部分没有值</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#8-vc的delegate的坑"><span class="nav-number">1.8.</span> <span class="nav-text">8.vc的delegate的坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-UISwitch-Target的坑"><span class="nav-number">1.9.</span> <span class="nav-text">9.UISwitch Target的坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-Masonry断言"><span class="nav-number">1.10.</span> <span class="nav-text">10.Masonry断言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#11-支付宝支付成功或者失败-不回调"><span class="nav-number">1.11.</span> <span class="nav-text">11.支付宝支付成功或者失败 不回调</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#12-页面传model深拷贝"><span class="nav-number">1.12.</span> <span class="nav-text">12.页面传model深拷贝</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">wxdeng</span>
+</div>
+
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.0"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.0"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
